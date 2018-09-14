@@ -71,13 +71,23 @@ public class Point {
     }
 
     // c. 
-    public static void inputPoint() {
-        String x1, y1;
-        float X1, Y1;
-        boolean check = true;
+    public static Point inputPoint(String inputX, String inputY) {
+        float x1, y1;
+        String inputErrorX = "Hoanh do la so thuc.Vui long nhap lai!";
+
+        String inputErrorY = "Tung do la so thuc.Vui long nhap lai!";
+
+        x1 = input(inputX, inputErrorX);
+        y1 = input(inputY, inputErrorY);
+        Point p = new Point(x1, y1);
+        return p;
+    }
+
+    public static float input(String input, String inputError) {
+        String x1;
+        float X1 = 0;
         do {
-            check = true;
-            x1 = JOptionPane.showInputDialog("Nhap tung do : ");
+            x1 = JOptionPane.showInputDialog(input);
             if (x1 == null) {
                 break;
             } else {
@@ -85,16 +95,36 @@ public class Point {
                     X1 = Float.parseFloat(x1);
                     break;
                 } catch (NumberFormatException ex) {
-                    x1 = JOptionPane.showInputDialog("Tung do la so thuc. Vui long nhap lai: ");
+                    input = inputError;
+                    continue;
                 }
             }
-        } while (check);
+        } while (true);
+        return X1;
     }
 
+    // d. 
+    public static String printResult(Point p) {
+        return p.pointName + "(" + p.getX() + " , " + p.getY() + ")";
+    }
+
+    // e. 
     public static void main(String[] args) {
-        String test = "a";
 
-        inputPoint();
+        String inputX = "Nhap hoanh do diem thu nhat :";
+        String inputY = "Nhap tung do diem thu nhat :";
+        Point p1 = new Point();
+        System.out.println(printResult(p1));
+
+        Point p2 = new Point(3, 4);
+        System.out.println(printResult(p2));
+
+        Point p3 = new Point("B", 5, 6);
+        System.out.println(printResult(p3));
+
+        Point p4 = new Point(p3);
+        System.out.println(printResult(p4));
+
+        System.out.println(printResult(inputPoint(inputX, inputY)));
     }
-
 }
