@@ -7,13 +7,15 @@ package btvn.b4_luong.btap3;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Vector;
 
 /**
  *
@@ -21,20 +23,23 @@ import java.util.logging.Logger;
  */
 public class Test {
 
+    static File file = new File("testObject.txt");
+
     public static void main(String[] args) throws IOException {
         //Nhap danh sach cac user va luu vao file
-
         boolean check = true;
-        File file = new File("src/btvn/b4_luong/btap3/test2.txt");
+        Vector<User> v = new Vector<>();
         while (check) {
             System.out.println("Chon chuc nang");
             System.out.println("1. Nhap user");
-            System.out.println("2. Doc file user");
-            System.out.println("3. Thoat");
+            System.out.println("2. Ghi vao file");
+            System.out.println("3. Doc file user");
+            System.out.println("4. TOng diem cac user");
+            System.out.println("5. Thoat");
             Scanner sc = new Scanner(System.in);
-            int input = sc.nextInt();
+            String input = sc.nextLine();
             switch (input) {
-                case 1:
+                case "1":
                     System.out.println("Nhap thong tin user");
                     System.out.println("Ten tai khoan : ");
                     Scanner sc1 = new Scanner(System.in);
@@ -47,13 +52,19 @@ public class Test {
                     System.out.println("Diem : ");
                     float score = sc2.nextFloat();
                     User user = new User(username, age, address, score);
-                    writeToFile(user, file);
+                    v.add(user);
                     break;
-                case 2:
-                    readeFile(file);
-
+                case "2":
+                    writeToFile(v, file);
                     break;
-                case 3:
+                case "3": {
+                    readFile(file);
+                }
+                break;
+                case "4":
+                    System.out.println(readFile(file));
+                    break;
+                case "5":
                     check = false;
                     break;
                 default:
@@ -63,42 +74,44 @@ public class Test {
         }
     }
 
-    public static void writeToFile(User user, File file) {
-        ObjectOutputStream oos = null;
+    public static void writeToFile(Vector<User> v, File file) {
+
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(file, true));
-            oos.writeObject(user);
-            System.out.println("Success");
+            FileOutputStream fos = new FileOutputStream(file, true);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(v);
+            oos.close();
+            System.out.println("data write successfully");
+        } catch (FileNotFoundException ex) {
         } catch (IOException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 
-    public static void readeFile(File file) {
-        ObjectInputStream ois = null;
+    public static float readFile(File file) {
+        float score = 0;
         try {
-            ois = new ObjectInputStream(new FileInputStream(file));
-            User arr = (User) ois.readObject();
-//            User[] arr = (User[]) ois.readObject();
-//            ArrayList<User> al = new ArrayList<>();
-//            for(int i=0;i<arr.length;i++){
-//                al.add(arr[i]);
-//            }
-//            Collections.sort(al, new SortByName());
-            System.out.println("Danh sach user sap xep theo ten : ");
-//            for(int i=0;i<arr.length;i++){
-            System.out.println(arr.toString());
-//            }
-        } catch (IOException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            Vector<User> deserializeStudent = (Vector<User>) ois.readObject();
+            System.out.println(deserializeStudent);
+            ois.close();
+            Collections.sort(deserializeStudent, new SortByName());
+            Iterator<User> iter = deserializeStudent.iterator();
+            while (iter.hasNext()) {
+                User s = iter.next();
+                System.out.println(
+                        "User: " + s.getUser() + ", "
+                        + "Age: " + s.getAddress() + ", "
+                        + "Adress: " + s.getAge() + ", "
+                        + "Score: " + s.getScore()
+                );
+                score += s.getScore();
+            }
+        } catch (FileNotFoundException ex) {
+        } catch (IOException | ClassNotFoundException ex) {
         }
+        return score;
     }
+
 }

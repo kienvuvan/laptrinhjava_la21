@@ -12,13 +12,11 @@ package laam21;
 public class MaHoaKyTu {
 
     public static void main(String[] args) {
-        String str = "a";
+        String str = "Hello";
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < str.length(); i++) {
-            int c = ((int) str.charAt(i) * 7 + 20) % 26;
-            sb.append((char) c);
+            sb.append(sinhMa((int)str.charAt(i)));
         }
-        System.out.println(sb);
         StringBuffer sbResult = new StringBuffer();
         for (int i = 0; i < sb.length(); i++) {
             int c = giaiMa(sb.charAt(i));
@@ -27,6 +25,10 @@ public class MaHoaKyTu {
         System.out.println(sbResult);
     }
 
+    public static int sinhMa(int c){
+        return (c*7+20)%26;
+    }
+    
     public static int giaiMa(int c) {
         int d = ((c - 20) * 15) % 26;
         return d > 0 ? d : 26 + d;
