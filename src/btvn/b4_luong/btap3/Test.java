@@ -24,7 +24,6 @@ import java.util.Vector;
 public class Test {
 
     static File file = new File("testObject.txt");
-
     public static void main(String[] args) throws IOException {
         //Nhap danh sach cac user va luu vao file
         boolean check = true;
@@ -34,7 +33,7 @@ public class Test {
             System.out.println("1. Nhap user");
             System.out.println("2. Ghi vao file");
             System.out.println("3. Doc file user");
-            System.out.println("4. TOng diem cac user");
+            System.out.println("4. Tong diem cac user");
             System.out.println("5. Thoat");
             Scanner sc = new Scanner(System.in);
             String input = sc.nextLine();
@@ -57,10 +56,9 @@ public class Test {
                 case "2":
                     writeToFile(v, file);
                     break;
-                case "3": {
+                case "3":
                     readFile(file);
-                }
-                break;
+                    break;
                 case "4":
                     System.out.println(readFile(file));
                     break;
@@ -75,7 +73,6 @@ public class Test {
     }
 
     public static void writeToFile(Vector<User> v, File file) {
-
         try {
             FileOutputStream fos = new FileOutputStream(file, true);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -109,9 +106,10 @@ public class Test {
                 score += s.getScore();
             }
         } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
         } catch (IOException | ClassNotFoundException ex) {
+            System.out.println(ex.toString());
         }
         return score;
     }
-
 }
